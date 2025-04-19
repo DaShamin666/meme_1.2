@@ -1,5 +1,6 @@
 import requests
 from services.authorize import Authorize
+import requests
 
 class PostMeme:
     def __init__(self, name):
@@ -9,8 +10,7 @@ class PostMeme:
 
     def execute(self, data):
         response = requests.post(f'{self.url}meme', headers=self.headers, json=data)
-        print(f"POST {self.url}meme with data: {data}")
-        print(f"Response Code: {response.status_code}, Response Body: {response.text}")
-        if response.status_code != 200:
-            return None  # Или обработайте ошибку другим образом
-        return response.json().get('id', None)
+        if response.status_code == 200:
+            return response.json().get('id', None), response.status_code
+        else:
+            return None, response.status_code

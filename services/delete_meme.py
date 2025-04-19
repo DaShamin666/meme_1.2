@@ -8,5 +8,7 @@ class DeleteMeme:
         self.headers = {'Authorization': f"{self.token}"}
 
     def execute(self, meme_id):
+        if isinstance(meme_id, tuple):
+            meme_id = meme_id[0]  # Извлекаем ID из кортежа
         response = requests.delete(f'{self.url}meme/{meme_id}', headers=self.headers)
         return response.status_code
