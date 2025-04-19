@@ -6,15 +6,16 @@ from services.put_meme import PutMeme
 from services.get_one_meme import GetOneMeme
 from services.delete_meme import DeleteMeme
 from services.valid_or_not import ValidOrNot
+from test_api.data import API_INSTANCE, MEME_DATA
 
 @pytest.fixture(scope='session')
 def api_instance():
-    return "Gachi Mem"
+    return API_INSTANCE
 
 @pytest.fixture(scope='session')
 def token():
     auth = Authorize()
-    return auth.get_token("Gachi Mem")
+    return auth.get_token(API_INSTANCE)
 
 @pytest.fixture(autouse=True)
 def validate_token(token):
@@ -23,23 +24,13 @@ def validate_token(token):
 
 @pytest.fixture()
 def meme_data():
-    return {
-        "text": "очень смешные мемы))",
-        "url": "https://www.meme-arsenal.com/memes/3f2a7b338fcd49f8d1d03b3f2a4bb7f2.jpg",
-        "tags": ["сильный", "мощный"],
-        "info": {"colors": ["черный", "все черное"]}
-    }
+    return MEME_DATA
 
-@pytest.fixture()
-def meme_id(api_instance, meme_data):
-    post_meme = PostMeme(api_instance)
-    meme_id, _ = post_meme.execute(meme_data)
-    return meme_id
-
-@pytest.fixture()
-def created_meme(api_instance, meme_data):
-    post_meme = PostMeme(api_instance)
-    meme_id, _ = post_meme.execute(meme_data)
+@pytest.fixture
+def new_meme_id(post_meme_service):
+    meme_id, response_code = post_meme_service.execute(MEME_DATA)
+    assert response_code == 200
+    assert meme_id is not None
     return meme_id
 
 @pytest.fixture()
