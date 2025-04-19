@@ -8,10 +8,7 @@ class PutMeme:
         self.headers = {'Authorization': f"{self.token}"}
 
     def execute(self, meme_id, data):
+        if isinstance(meme_id, tuple):
+            meme_id = meme_id[0]  # Извлекаем ID из кортежа
         response = requests.put(f'{self.url}meme/{meme_id}', headers=self.headers, json=data)
-
-        # Вывод информации для отладки
-        print(f"PUT {self.url}meme/{meme_id} with data: {data}")
-        print(f"Response Code: {response.status_code}, Response Body: {response.text}")
-
         return response.status_code

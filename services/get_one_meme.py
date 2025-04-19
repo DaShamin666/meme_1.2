@@ -8,5 +8,10 @@ class GetOneMeme:
         self.headers = {'Authorization': f"{self.token}"}
 
     def execute(self, meme_id):
+        if isinstance(meme_id, tuple):
+            meme_id = meme_id[0]  # Извлекаем ID из кортежа
         response = requests.get(f'{self.url}meme/{meme_id}', headers=self.headers)
-        return response.status_code
+        if response.status_code == 200:
+            return response.json(), response.status_code
+        else:
+            return None, response.status_code

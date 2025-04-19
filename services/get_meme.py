@@ -9,4 +9,7 @@ class GetMeme:
 
     def execute(self):
         response = requests.get(f'{self.url}meme', headers=self.headers)
-        return response.status_code
+        if response.status_code == 200:
+            return response.status_code, response.json()
+        else:
+            return response.status_code, None
