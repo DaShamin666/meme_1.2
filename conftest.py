@@ -26,8 +26,9 @@ def validate_token(token):
 def meme_data():
     return MEME_DATA
 
-@pytest.fixture
-def new_meme_id(post_meme_service):
+@pytest.fixture()
+def new_meme_id(post_meme_service, token):
+    post_meme_service.headers['Authorization'] = f"{token}"
     meme_id, response_code = post_meme_service.execute(MEME_DATA)
     assert response_code == 200
     assert meme_id is not None
